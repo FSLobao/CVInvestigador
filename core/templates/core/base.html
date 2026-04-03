@@ -1,0 +1,563 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Universidad de La Laguna">
+        <meta name="keywords" content="Universidad de La Laguna">
+        <meta name="author" content="Universidad de La Laguna">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <title>{% trans "University of La Laguna - Researcher Portal" %}</title>
+
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://static.ull.es/v3/dist/img/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://static.ull.es/v3/dist/img/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://static.ull.es/v3/dist/img/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="http://static.ull.es/v3/dist/img/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="http://static.ull.es/v3/dist/img/favicon.ico">
+        <link href="//static.ull.es/v3/dist/css/ull.min.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/investigacion.css" rel="stylesheet">
+        <script src="//static.ull.es/v3/dist/js/ull.min.js"></script>
+        <!--[if lt IE 9]><script src="//static.ull.es/v3/dist/js/ullie.min.js"></script><![endif]-->
+    </head>
+
+    <body>
+    {%  if devel %}
+        <div class="navbar navbar-default navbar-pre" style="padding-top: 3px;" role="navigation">
+            <i class="fa fa-warning"></i>
+            <span>Servidor en preproducción</span>
+            <a href="mailto:{{ email }} ">Mas información</a>
+        </div>
+    {%  endif %}
+    {% if user.is_impersonate %}
+        <div class="navbar navbar-default navbar-pre" style="padding-top: 3px;" role="navigation">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>{% trans "You are currently impersonating another user." %} <a href="{% url 'impersonate-stop' %}"> {% trans "Stop impersonation" %}</a></span>
+        </div>
+    {%  endif %}
+        <div class="navbar navbar-default navbar-ull" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-app-collapse">
+                        <span class="sr-only">Desplegar menú de aplicación</span>
+                        <span class="fa fa-bars fa-stack"></span>
+                    </button>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                        <span class="sr-only">Desplegar menú de navegación</span>
+                        <span class="fa fa-link fa-stack"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://www.ull.es/" title="Universidad de La Laguna">{% trans "University of La Laguna" %}</a>
+                </div>
+
+                <div class="collapse navbar-collapse navbar-main-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Remote services" %} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a target="_blank" title="{% trans "User Profile Management" %}" href="http://usuarios.ull.es"><i class="fa fa-user"></i> {% trans "User Profile Management" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Portal" %}" href="http://portal.ull.es"><i class="fa fa-folder-open"></i> {% trans 'Portal' %}</a></li>
+                                <li><a target="_blank" title="{% trans "Electronic office" %}" href="http://sede.ull.es"><i class="fa fa-briefcase"></i> {% trans "Electronic office" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Virtual Campus" %}" href="http://www.campusvirtual.ull.es"><i class="fa fa-pencil"></i> {% trans "Virtual Campus" %}</a></li>
+                                <li><a target="_blank" title="{% trans "e-mail" %}" href="http://ull.edu.es"><i class="fa fa-envelope"></i> {% trans "e-mail" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Virtual Hard Drive" %}" href="http://ddv.ull.es/"><i class="fa fa-hdd-o"></i> {% trans "Virtual Hard Drive" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Digital library" %}" href="http://www.bbtk.ull.es/view/institucional/bbtk/Biblioteca_Digital/es"><i class="fa fa-book"></i> {% trans "Digital library" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Events" %}" href="http://eventos.ull.es"><i class="fa fa-calendar"></i> {% trans "Events" %}</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Contact" %} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a target="_blank" href="http://www.ull.es/"><i class="fa fa-globe"></i> {% trans "ULL website" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Contact form" %}" href="http://www.ull.es/view/institucional/ull/Contacto_3/es"><i class="fa fa-list-alt"></i> {% trans "Contact form" %}</a></li>
+                                <li><a target="_blank" title="{% trans "Telephone directory" %}" href="http://www.ull.es/view/institucional/ull/Telefonos/es"><i class="fa fa-phone"></i> {% trans "Telephone directory" %}</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                    <ul class="rrss text-muted list-inline">
+                                        <li><a target="_blank" href="http://www.facebook.com/universidaddelalaguna"><i class="fa fa-facebook-square"></i></a></li>
+                                        <li><a target="_blank" href="http://www.tuenti.com/#m=Page&amp;func=index&amp;page_key=1_160_68944913"><i class="fa fa-tumblr-square"></i></a></li>
+                                        <li><a target="_blank" href="http://twitter.com/CanalULL"><i class="fa fa-twitter-square"></i></a></li>
+                                        <li><a target="_blank" href="http://www.linkedin.com/groups/Universidad-Laguna-2656178"><i class="fa fa-linkedin-square"></i></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar navbar-default navbar-app" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <ol class="breadcrumb">
+                        <li class="active"><a href="{% url 'index'%}">{% trans "Researcher Portal" %}</a></li>
+                        {% block breadcrumb_app %}
+
+                        {% endblock breadcrumb_app %}
+                    </ol>
+                </div>
+                <div class="collapse navbar-collapse navbar-app-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% block navbar_links %}
+
+                        {% endblock navbar_links %}
+                        <li class="dropdown">
+                            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown">{% trans "Select language" %} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                {% for language in cp_languages %}
+                                <li><a href="{{language.url}}">{{language.name}} ({{language.code}})</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-question-circle"></i> {% trans "Help and support" %} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <!--
+                                <li><a target="_blank" title="Portal de servicio" href="http://www.stic.ull.es/info/servicios/servicios/index.asp"><i class="fa fa-globe"></i> Portal de servicio</a></li>
+                                -->
+                                <li><a title="{% trans "FAQ" %}" href="{% url 'faq' %}"><i class="fa fa-question-circle"></i> {% trans "Frequently Asked Questions" %}</a></li>
+                                <li class="divider"></li>
+                                <li><a target="_blank" title="{% trans "e-mail" %} sopinve@ull.es" href="mailto:sopinve@ull.es"><i class="fa fa-envelope"></i> sopinve@ull.es</a></li>
+                                <li><p><i class="fa fa-phone"></i> (+34) 922 31 9558</p></li>
+                                <li><p><i class="fa fa-map-marker"></i> Edificio Central <br/>C/ Delgado Barreto, s/n. 38071 <br/>San Cristóbal de La Laguna</p></li>
+                                <!--
+                                <li class="divider"></li>
+                                <li><p>Texto específico que puede incluir <a href="#">enlaces</a>, texto en <strong>negrita</strong>, <i>cursiva</i> y otros elementos html.</p></li>
+                                -->
+                            </ul>
+                        </li>
+                        {%  if not user.is_anonymous %}
+                            <li class="dropdown"><a href="{% url 'logout' %}" class="btn btn-danger btn-signout"><i class="fa fa-sign-out"></i> {% trans "Logout" %}</a></li>
+                        {%  else %}
+                            <li class="dropdown"><a href="{% url 'login' %}" class="btn btn-success btn-signin"><i class="fa fa-sign-in"></i> {% trans "Login" %}</a></li>
+                        {%  endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            {% if sitewide_warning %}
+                <div style="text-align: center;">
+                    <div class="alert alert-danger" style="margin-bottom: 15px; display: inline-block;">
+                        <i class="fa fa-exclamation-circle"></i>
+                        {{ sitewide_warning }}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-9 col-md-push-3" role="main">
+                    {% block main %}
+                    <h1 class="page-header">Título principal</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dictum erat metus, tempor eleifend odio sagittis vitae. Phasellus nunc lectus, pellentesque et tincidunt lacinia, bibendum id ante. Ut suscipit ac tellus eu molestie. Ut non rhoncus sapien. Maecenas lacinia vehicula facilisis. Etiam auctor consequat tortor eget ornare. Suspendisse eros nulla, tincidunt vitae fringilla vel, mattis id ante.</p>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="section">
+                                    <ul class="nav nav-tabs header">
+                                        <li class="active">Elementos básicos</li>
+                                    </ul>
+                                    <div class="content">
+                                        <form class="form-horizontal">
+                                            <div class="section-divider">Formulario horizontal</div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">Campo en línea: </label>
+                                                    <div class="col-sm-9">
+                                                        <div class="form-inline">
+                                                            <div class="form-group">
+                                                                <select class="form-control">
+                                                                    <option value="0" selected="selected">Tipo</option>
+                                                                    <option value="1">DNI sin letra</option>
+                                                                    <option value="2">Pasaporte</option>
+                                                                    <option value="4">Nº identificación extranjeros</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" disabled="" placeholder="123456789a" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" placeholder="Letra" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Campo de entrada: </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Campo de entrada en línea: </label>
+                                                    <div class="col-md-6">
+                                                        <div class="form-inline">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <span class="help-block"> Mensaje de ayuda simple</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Selección simple: </label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control">
+                                                            <option value="0" selected="selected">Uno</option>
+                                                            <option value="1">Dos</option>
+                                                            <option value="2">Tres</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Selección múltiple: </label>
+                                                    <div class="col-sm-4">
+                                                        <select multiple="" class="form-control">
+                                                            <option value="0">Uno</option>
+                                                            <option value="1">Dos</option>
+                                                            <option value="2">Tres</option>
+                                                            <option value="3">Cuatro</option>
+                                                            <option value="4">Cinco</option>
+                                                            <option value="5">Seis</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Checkbox simple: </label>
+                                                    <div class="col-md-1">
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" value="" class="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Checkbox múltiple: </label>
+                                                    <div class="col-md-6">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="option1"> 1
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="option2"> 2
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="option3"> 3
+                                                        </label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Campo de texto: </label>
+                                                    <div class="col-sm-4">
+                                                        <textarea class="form-control" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Radios: </label>
+                                                    <div class="col-sm-6">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                                                                Opción uno
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                                                Opción dos
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <form>
+                                                <div class="section-divider">Formulario vertical</div>
+                                                <div class="form-group">
+                                                    <label class="">Campo de entrada: </label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="">Campo de texto: </label>
+                                                    <textarea class="form-control" rows="3"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="section">
+                                        <ul class="nav nav-tabs header">
+                                            <li class="active">Elementos deshabilitados</li>
+                                        </ul>
+                                        <div class="content">
+                                            <form class="" role="form">
+                                                <fieldset disabled="">
+                                                    <div class="form-group">
+                                                        <label for="disabledTextInput">Selector simple deshabilitado</label>
+                                                        <input type="text" id="disabledTextInput" class="form-control" placeholder="123456789a">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="disabledSelect">Selector múltiple deshabilitado</label>
+                                                        <select id="disabledSelect" class="form-control">
+                                                            <option>Uno</option>
+                                                            <option>Dos</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox"> Checkbox deshabilitado
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="section">
+                                        <ul class="nav nav-tabs header">
+                                            <li class="active">Elementos destacados y mensajes</li>
+                                        </ul>
+                                        <div class="content">
+                                            <div class="alert alert-warning">Ejemplo de mensaje destacado</div>
+                                            <form class="form-horizontal" role="form">
+                                                <div class="section-divider">Formulario horizontal</div>
+                                                <div class="form-group has-success has-feedback">
+                                                    <label class="control-label col-md-4">Campo de texto "success" con icono</label>
+                                                    <div class="col-md-3">
+                                                        <input type="text" class="form-control">
+                                                        <span class="fa fa-check form-control-feedback"></span>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <form class="" role="form">
+                                                <div class="section-divider">Formulario vertical</div>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-md-offset-3">
+                                                        <div class="form-group has-success">
+                                                            <label class="control-label">Campo de texto "success"</label>
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                        <div class="form-group has-warning">
+                                                            <label class="control-label">Campo de texto "warning"</label>
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                        <div class="form-group has-error">
+                                                            <label class="control-label">Campo de texto "error"</label>
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="section">
+                                        <ul class="nav nav-tabs header">
+                                            <li class="active">Botones</li>
+                                        </ul>
+                                        <div class="content">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">Campo de entrada: </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col col-md-9 col-md-offset-3">
+                                                        <input type="submit" value="Guardar" class="btn btn-primary">
+                                                        <button class="btn btn-default" type="button">Cancelar</button>
+                                                    </div>
+                                                </div>
+                                                <div class="section-divider">Colores</div>
+                                                <button type="button" class="btn btn-default">Default</button>
+                                                <button type="button" class="btn btn-primary">Primary</button>
+                                                <button type="button" class="btn btn-success">Success</button>
+                                                <button type="button" class="btn btn-info">Info</button>
+                                                <button type="button" class="btn btn-warning">Warning</button>
+                                                <button type="button" class="btn btn-danger">Danger</button>
+                                                <button type="button" class="btn btn-link">Link</button>
+                                                <div class="section-divider">Tamaños</div>
+                                                    <button type="button" class="btn btn-primary btn-lg">Large button</button>
+                                                    <button type="button" class="btn btn-primary">Default button</button>
+                                                    <button type="button" class="btn btn-primary btn-sm">Small button</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">Extra small button</button>
+                                                <div style="max-width: 400px; margin: 15px auto" class="well">
+                                                    <button class="btn btn-primary btn-lg btn-block" type="button">Block level button</button>
+                                                    <button class="btn btn-default btn-lg btn-block" type="button">Block level button</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="section">
+                                                <ul class="nav nav-tabs header">
+                                                    <li class="active">Sección izquierda</li>
+                                                </ul>
+                                                <div class="content">
+                                                    <form class="form-horizontal" role="form">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4">Campo de entrada: </label>
+                                                            <div class="col-md-6">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="section">
+                                                <ul class="nav nav-tabs header">
+                                                    <li class="active">Sección derecha</li>
+                                                </ul>
+                                                <div class="content">
+                                                    <form class="form-horizontal" role="form">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4">Campo de entrada: </label>
+                                                            <div class="col-md-6">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock main %}
+                    </div>
+
+                    <div class="col-md-3 col-md-pull-9 sidebar">
+                        <div class="panel panel-default panel-ull color-7A3B7A">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-user"></i> {% trans "User Profile" %}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li>
+                                        <div class="media">
+                                            <!--<a href="http://static.ull.es/v3/docs/examples/form/#" class="pull-left"><img class="media-object" alt="48x48" style="width: 48px; height: 48px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABF0lEQVRoge2UsQ7DIAxE+/+f4o3NCxsbIzufwC/QyYg4rVRC1GulG24gwPmegTxaa/2f9UAHIAA6AAHQAQiADkAAdAACoAMQAB2AAOgABEAH+BpAKaWLSE8pnb6ZSilLxe/w/BgghHAqJiI9xthba11Vu4gsAdzh+RFASml0xIr57tmaWuuYsyAxxlM3Vz0vA9Rah+lKtyy07bN1O56XAFS1q+qh6Dw/31e/993cjucSQM55HKEv5sfW8fm47dvc/V3PJQA7Qi9VHUHsXtv9zTkfxv5vsuN5+RG/6o5/cP6h2h/G9oUQtj1vBZivg8k6ZY/Tj/1dX/HcBvhVEQAtAqBFALQIgBYB0CIAWgRAiwBoEQAtAqD1BBs6m19czwjTAAAAAElFTkSuQmCC"></a> -->
+                                            <div class="media-body">
+                                                <h4 class="media-heading">{{first_name}} {{last_name}}</h4>
+                                                {{ user.profile.documento }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider"></li>
+                                    {% if not user.is_anonymous %}
+                                        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> {% trans "Home" %}</a></li>
+                                        <li><a href='{% url 'cvn' %}'><i class="fa fa-book"></i> {% trans "Manage CVN" %}</a></li>
+                                        {% if is_accounting_installed %}
+                                            <li><a href='{% url 'accounting' %}'><i class="fa fa-eur"></i> {% trans "Accounting" %}</a></li>
+                                        {% endif %}
+                                        {%  if user.is_impersonate %}
+                                            <li><a href="{% url 'impersonate-stop' %}"><i class="fa fa-suitcase"></i> {% trans "Stop impersonation" %}</a></li>
+                                        {% endif %}
+                                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> {% trans "Exit" %}</a></li>
+                                    {% else %}
+                                        <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> {% trans "Login" %}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        {% block submenu %}
+                        <div class="panel panel-default panel-ull color-336699">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-file"></i> Título de bloque</h3>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Ejemplo de enlace 1</a></li>
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Ejemplo de enlace 2 mucho más largo que el anterior</a></li>
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Enlace 3</a></li>
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Ejemplo de separador </a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Ejemplo de separador 2</a></li>
+                                    <li><a href="http://static.ull.es/v3/docs/examples/form/#">Más opciones</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        {% endblock submenu %}
+
+                        {% if 'auth.read_admin_menu' in perms %}
+                        <div class="panel panel-default panel-ull">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-lock"></i> {% trans "Administration" %}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% if user.is_staff %}
+                                        <li><a href="{% url 'admin:index' %}" target="_blank"><i class="fa fa-suitcase"></i> {% trans "Admin Panel" %}</a></li>
+                                    {% elif 'auth.basic_staff' in perms %}
+                                        <li><a href="{% url 'basic_admin:index' %}" target="_blank"><i class="fa fa-suitcase"></i> {% trans "Admin Panel" %}</a></li>
+                                    {% endif %}
+                                    {% if is_statistics_installed and 'statistics.view_cvn_stats' in perms %}
+                                        <li><a href="{% url 'area_stats' %}"><i class="fa fa-bar-chart-o"></i> {% trans "Statistics by Area" %}</a></li>
+                                        <li><a href="{% url 'dept_stats' %}"><i class="fa fa-bar-chart-o"></i> {% trans "Statistics by Department" %}</a></li>
+                                        <li><a href="{{ old_portal }}/cvnstats/"><i class="fa fa-bar-chart-o"></i> {% trans "Statistics by Group" %}</a></li>
+                                    {% endif %}
+                                    {% if 'cvn.view_university_report' in perms %}
+                                        <li><a href="{% url 'ull_report' %}"><i class="fa fa-university"></i> {% trans "Report ULL" %}</a></li>
+                                    {% endif %}
+                                    {% if perms.cvn.read_cvn_reports %}
+                                        <li><a id="admin_reports_link" href='{% url 'admin_reports' %}'><i class="fa fa-files-o"></i> {% trans "Reports" %}</a></li>
+                                    {% endif %}
+                                    {% if perms.auth.impersonate %}
+                                        {% if not user.is_impersonate %}
+                                            <li><a href="{% url 'impersonate-search' %}"><i class="fa fa-suitcase"></i> {% trans "Impersonate search" %}</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+        <div id="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="address pull-left">
+                            <li><strong>{% trans "University of La Laguna" %}</strong><br> Pabellón de Gobierno, C/ Molinos de Agua s/n. | San Cristóbal de La Laguna, Santa Cruz de Tenerife - España (38200) | {% trans "Phone number" %}: (+34) 922 31 90 00/01</li>
+                            {% block footer_list_extra %}
+                            {% endblock footer_list_extra %}
+                        </ul>
+                        <ul class="list-inline text-muted pull-right">
+                            <li><a title="Facebook" target="_blank" href="http://www.facebook.com/universidaddelalaguna"><span class="fa fa-facebook-square"></span></a></li>
+                            <li><a title="Tuenti" target="_blank" href="http://www.tuenti.com/#m=Page&amp;func=index&amp;page_key=1_160_68944913"><i class="fa fa-tumblr-square"></i></a></li>
+                            <li><a title="Twitter" target="_blank" href="http://twitter.com/CanalULL"><i class="fa fa-twitter-square"></i></a></li>
+                            <li><a title="LinkedIn" target="_blank" href="http://www.linkedin.com/groups/Universidad-Laguna-2656178"><i class="fa fa-linkedin-square"></i></a></li>
+                            <li><a title="Página web ULL" target="_blank" href="http://www.ull.es/"><i class="fa fa-globe"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-55237523-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

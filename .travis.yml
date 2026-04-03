@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+#command to install dependencies
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install postgresql postgresql-client postgresql-contrib libpq-dev libxml2-dev libxslt1-dev python-dev xvfb redis-server mercurial
+install:
+    - "pip install -r requirements.min.txt"
+#command to run tests
+script: "python manage.py test"
+
+before_script:
+  - psql -c "CREATE USER username WITH PASSWORD 'password';" -U postgres
